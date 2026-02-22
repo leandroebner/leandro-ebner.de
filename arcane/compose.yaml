@@ -1,0 +1,28 @@
+# Arcane Compose Version 1771723071
+
+services:
+  arcane:
+    image: ghcr.io/getarcaneapp/arcane:latest
+    container_name: arcane
+    restart: unless-stopped
+    ports:
+      - 3552:3552
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/arcane/projects:/srv/arcane/projects
+      - arcane-data:/app/data
+      - arcane-backups:/backups
+    environment:
+      - PROJECTS_DIRECTORY=${PROJECTS_DIRECTORY:?Project definitions directory}
+      - JWT_SECRET=${JWT_SECRET:?Session secret}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:?Encryption key}
+
+volumes:
+  arcane-data:
+    external: true
+  arcane-backups:
+    external: true
+
+networks:
+  default:
+    name: arcane
